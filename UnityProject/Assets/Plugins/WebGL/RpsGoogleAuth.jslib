@@ -99,16 +99,16 @@ mergeInto(LibraryManager.library, {
     }
   },
 
-  RpsGoogleWebSignIn__deps: ['$RpsGoogleAuth'],
+  RpsGoogleWebSignIn__deps: ['$RpsGoogleAuth'],\n  RpsGoogleWebSignIn__sig: 'viiii',
   RpsGoogleWebSignIn: function (clientId, target, requestId, locale) { RpsGoogleAuth.start(UTF8ToString(clientId), UTF8ToString(target), UTF8ToString(requestId), UTF8ToString(locale)); },
-  RpsGoogleWebSignInSilent__deps: ['$RpsGoogleAuth'],
+  RpsGoogleWebSignInSilent__deps: ['$RpsGoogleAuth'],\n  RpsGoogleWebSignInSilent__sig: 'viiii',
   RpsGoogleWebSignInSilent: function (clientId, target, requestId, locale) { RpsGoogleAuth.silent(UTF8ToString(clientId), UTF8ToString(target), UTF8ToString(requestId)); },
-  RpsGoogleWebCancel__deps: ['$RpsGoogleAuth'],
+  RpsGoogleWebCancel__deps: ['$RpsGoogleAuth'],\n  RpsGoogleWebCancel__sig: 'v',
   RpsGoogleWebCancel: function () { RpsGoogleAuth.cancel(false); },
-  RpsGoogleWebSignOut__deps: ['$RpsGoogleAuth'],
+  RpsGoogleWebSignOut__deps: ['$RpsGoogleAuth'],\n  RpsGoogleWebSignOut__sig: 'v',
   RpsGoogleWebSignOut: function () { RpsGoogleAuth.cancel(true); },
 
-  RpsWsConnect: function (urlPtr) {
+  RpsWsConnect__sig: 'vi',\n  RpsWsConnect: function (urlPtr) {
     var url = UTF8ToString(urlPtr);
     try { if (window.__rpsSocket) window.__rpsSocket.close(); } catch (_) {}
     var ws = new WebSocket(url); window.__rpsSocket = ws;
@@ -117,6 +117,6 @@ mergeInto(LibraryManager.library, {
     ws.onclose = function (e) { try { SendMessage('RpsArena', 'OnWsClose', e.reason || ('code ' + e.code)); } catch (_) {} };
     ws.onerror = function () { try { SendMessage('RpsArena', 'OnWsClose', 'websocket error'); } catch (_) {} };
   },
-  RpsWsSend: function (messagePtr) { var m=UTF8ToString(messagePtr); if(window.__rpsSocket && window.__rpsSocket.readyState===1) window.__rpsSocket.send(m); },
-  RpsWsClose: function () { try { if(window.__rpsSocket) window.__rpsSocket.close(); } catch (_) {} window.__rpsSocket=null; }
+  RpsWsSend__sig: 'vi',\n  RpsWsSend: function (messagePtr) { var m=UTF8ToString(messagePtr); if(window.__rpsSocket && window.__rpsSocket.readyState===1) window.__rpsSocket.send(m); },
+  RpsWsClose__sig: 'v',\n  RpsWsClose: function () { try { if(window.__rpsSocket) window.__rpsSocket.close(); } catch (_) {} window.__rpsSocket=null; }
 });
