@@ -1,0 +1,31 @@
+# Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+UserSettings/
+MemoryCaptures/
+Recordings/
+
+# IDE
+.vs/
+.idea/
+*.csproj
+*.sln
+*.user
+*.suo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Signing/secrets
+*.keystore
+*.jks
+*.p12
+*.pem
+*.key
+.env
+.env.*
