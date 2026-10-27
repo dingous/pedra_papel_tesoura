@@ -1,0 +1,3 @@
+RPS_CHARACTERS_VALIDATED: 2 FBX, 18 clips, 2 prefabs, 30 finger joints per character.
+RPS_RENDER_SAVED D:\Git\Diego\Jogos Unity\Pedra Papel e Tesoura\ArtSource\Characters\Unity_Characters_Validation.png
+Exiting without the bug reporter. Application will terminate with return code 0

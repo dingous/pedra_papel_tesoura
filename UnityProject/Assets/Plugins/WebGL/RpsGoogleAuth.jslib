@@ -112,10 +112,10 @@ mergeInto(LibraryManager.library, {
     var url = UTF8ToString(urlPtr);
     try { if (window.__rpsSocket) window.__rpsSocket.close(); } catch (_) {}
     var ws = new WebSocket(url); window.__rpsSocket = ws;
-    ws.onopen = function () { try { SendMessage('RpsArena', 'OnWsOpen', ''); } catch (_) {} };
-    ws.onmessage = function (e) { try { SendMessage('RpsArena', 'OnWsMessage', String(e.data)); } catch (_) {} };
-    ws.onclose = function (e) { try { SendMessage('RpsArena', 'OnWsClose', e.reason || ('code ' + e.code)); } catch (_) {} };
-    ws.onerror = function () { try { SendMessage('RpsArena', 'OnWsClose', 'websocket error'); } catch (_) {} };
+    ws.onopen = function () { if (window.__rpsSocket !== ws) return; try { SendMessage('RpsArena', 'OnWsOpen', ''); } catch (_) {} };
+    ws.onmessage = function (e) { if (window.__rpsSocket !== ws) return; try { SendMessage('RpsArena', 'OnWsMessage', String(e.data)); } catch (_) {} };
+    ws.onclose = function (e) { if (window.__rpsSocket !== ws) return; try { SendMessage('RpsArena', 'OnWsClose', e.reason || ('code ' + e.code)); } catch (_) {} };
+    ws.onerror = function () { if (window.__rpsSocket !== ws) return; try { SendMessage('RpsArena', 'OnWsClose', 'websocket error'); } catch (_) {} };
   },
   RpsWsSend: function (messagePtr) { var m=UTF8ToString(messagePtr); if(window.__rpsSocket && window.__rpsSocket.readyState===1) window.__rpsSocket.send(m); },
   RpsWsClose: function () { try { if(window.__rpsSocket) window.__rpsSocket.close(); } catch (_) {} window.__rpsSocket=null; }

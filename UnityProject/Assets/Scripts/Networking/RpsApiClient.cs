@@ -36,7 +36,8 @@ namespace RpsArena.Networking
                 fail?.Invoke("HTTP " + request.responseCode + " - " + request.error);
                 yield break;
             }
-            ok?.Invoke(request.downloadHandler.text);
+            try { ok?.Invoke(request.downloadHandler.text); }
+            catch (Exception) { fail?.Invoke("Resposta inválida do servidor."); }
         }
     }
 }

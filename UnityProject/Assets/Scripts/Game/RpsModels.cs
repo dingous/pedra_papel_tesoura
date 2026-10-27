@@ -16,6 +16,8 @@ namespace RpsArena.Game
     [Serializable]
     public sealed class ServerPayload
     {
+        public long eventId;
+        public string reason;
         public string matchId;
         public PlayerSummaryDto you;
         public PlayerSummaryDto opponent;

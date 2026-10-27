@@ -57,6 +57,7 @@ namespace RpsArena.Auth
 
         public event Action<DingousSession> LoggedIn;
         public event Action LoggedOut;
+        public event Action<string> LoginFailed;
 
         public DingousSession Session { get; private set; }
         public string Token => Session?.IsValid == true ? Session.accessToken : string.Empty;
@@ -81,10 +82,12 @@ namespace RpsArena.Auth
             {
                 var session = await StartSignInAsync(false);
                 if (session?.IsValid == true) LoggedIn?.Invoke(session);
+                else LoginFailed?.Invoke("Login Google disponível no Android e na versão Web. Use o treino neste PC.");
             }
             catch (Exception ex)
             {
                 Debug.LogWarning("Login Google falhou: " + ex.Message);
+                LoginFailed?.Invoke("Não foi possível conectar ao Google. Tente novamente ou jogue um treino.");
             }
         }
 
@@ -129,6 +132,7 @@ namespace RpsArena.Auth
             if (_pending != null && !_pending.Task.IsCompleted) return _pending.Task;
 
             _pending = new TaskCompletionSource<DingousSession>();
+            var task = _pending.Task;
             _attemptId = Guid.NewGuid().ToString("N");
 
 #if UNITY_ANDROID && !UNITY_EDITOR
@@ -168,11 +172,13 @@ namespace RpsArena.Auth
                 CompleteError(ex.Message);
             }
 #elif UNITY_EDITOR
-            StartCoroutine(EditorDevelopmentLogin(_pending));
+            if (_config.ApiBaseUrl.StartsWith("http://localhost") || _config.ApiBaseUrl.StartsWith("http://127.0.0.1"))
+                StartCoroutine(EditorDevelopmentLogin(_pending));
+            else _pending.TrySetResult(null);
 #else
             _pending.TrySetResult(null);
 #endif
-            return _pending.Task;
+            return task;
         }
 
 #if UNITY_EDITOR

@@ -10,81 +10,59 @@ namespace RpsArena.Networking
 {
     public sealed class NativeWebSocketTransport : IRealtimeTransport
     {
-        private readonly ConcurrentQueue<Action> _mainThread = new();
+        private readonly ConcurrentQueue<Action> _mainThread=new();
+        private readonly SemaphoreSlim _send=new(1,1);
         private ClientWebSocket _socket;
         private CancellationTokenSource _cts;
-
         public event Action Connected;
         public event Action<string> MessageReceived;
         public event Action<string> Closed;
-        public bool IsConnected => _socket?.State == WebSocketState.Open;
-
+        public bool IsConnected=>_socket?.State==WebSocketState.Open;
         public async Task ConnectAsync(string url)
         {
             await DisconnectAsync();
-            _cts = new CancellationTokenSource();
-            _socket = new ClientWebSocket();
-            await _socket.ConnectAsync(new Uri(url), _cts.Token);
-            _mainThread.Enqueue(() => Connected?.Invoke());
-            _ = ReceiveLoopAsync();
+            var cts=_cts=new CancellationTokenSource(); var socket=_socket=new ClientWebSocket();
+            using var timeout=CancellationTokenSource.CreateLinkedTokenSource(cts.Token); timeout.CancelAfter(15000);
+            await socket.ConnectAsync(new Uri(url),timeout.Token);
+            _mainThread.Enqueue(()=>{if(socket==_socket) Connected?.Invoke();});
+            _ = Receive(socket,cts.Token);
         }
-
         public async Task SendAsync(string message)
         {
-            if (!IsConnected) return;
-            var bytes = Encoding.UTF8.GetBytes(message);
-            await _socket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, _cts.Token);
+            if(!IsConnected) throw new InvalidOperationException("WebSocket desconectado.");
+            var socket=_socket; var token=_cts.Token; await _send.WaitAsync(token);
+            try { var bytes=Encoding.UTF8.GetBytes(message); await socket.SendAsync(new ArraySegment<byte>(bytes),WebSocketMessageType.Text,true,token); }
+            finally { _send.Release(); }
         }
-
-        public async Task DisconnectAsync()
+        public Task DisconnectAsync()
         {
+            var socket=_socket; _socket=null; var cts=_cts; _cts=null;
+            cts?.Cancel(); socket?.Abort(); socket?.Dispose(); cts?.Dispose(); return Task.CompletedTask;
+        }
+        public void Tick() { while(_mainThread.TryDequeue(out var action)) action(); }
+        private async Task Receive(ClientWebSocket socket,CancellationToken token)
+        {
+            string reason="Conexão encerrada."; var buffer=new byte[8192];
             try
             {
-                _cts?.Cancel();
-                if (_socket?.State == WebSocketState.Open)
-                    await _socket.CloseAsync(WebSocketCloseStatus.NormalClosure, "client", CancellationToken.None);
-            }
-            catch { }
-            finally
-            {
-                _socket?.Dispose();
-                _socket = null;
-                _cts?.Dispose();
-                _cts = null;
-            }
-        }
-
-        public void Tick()
-        {
-            while (_mainThread.TryDequeue(out var action)) action();
-        }
-
-        private async Task ReceiveLoopAsync()
-        {
-            var buffer = new byte[8192];
-            try
-            {
-                while (_socket?.State == WebSocketState.Open && _cts is not null)
+                while(socket.State==WebSocketState.Open && !token.IsCancellationRequested)
                 {
-                    using var ms = new System.IO.MemoryStream();
-                    WebSocketReceiveResult result;
+                    using var stream=new System.IO.MemoryStream(); WebSocketReceiveResult result;
                     do
                     {
-                        result = await _socket.ReceiveAsync(new ArraySegment<byte>(buffer), _cts.Token);
-                        if (result.MessageType == WebSocketMessageType.Close) break;
-                        ms.Write(buffer, 0, result.Count);
-                    } while (!result.EndOfMessage);
-
-                    if (result.MessageType == WebSocketMessageType.Close) break;
-                    var json = Encoding.UTF8.GetString(ms.ToArray());
-                    _mainThread.Enqueue(() => MessageReceived?.Invoke(json));
+                        result=await socket.ReceiveAsync(new ArraySegment<byte>(buffer),token);
+                        if(result.MessageType==WebSocketMessageType.Close) break;
+                        stream.Write(buffer,0,result.Count);
+                        if(stream.Length>1024*1024) throw new InvalidOperationException("Mensagem excessiva.");
+                    } while(!result.EndOfMessage);
+                    if(result.MessageType==WebSocketMessageType.Close) break;
+                    var json=Encoding.UTF8.GetString(stream.ToArray());
+                    _mainThread.Enqueue(()=>{if(socket==_socket) MessageReceived?.Invoke(json);});
                 }
             }
-            catch (OperationCanceledException) { }
-            catch (Exception ex)
-            {
-                _mainThread.Enqueue(() => Closed?.Invoke(ex.Message));
-            }
+            catch(OperationCanceledException) { }
+            catch(Exception) { reason="WebSocket indisponível."; }
+            finally { _mainThread.Enqueue(()=>{if(socket==_socket) Closed?.Invoke(reason);}); }
         }
     }
 }

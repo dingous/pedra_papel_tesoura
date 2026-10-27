@@ -17,7 +17,7 @@ namespace RpsArena.Networking
         public bool IsConnected { get; private set; }
 
         public Task ConnectAsync(string url) { RpsWsConnect(url); return Task.CompletedTask; }
-        public Task SendAsync(string message) { if (IsConnected) RpsWsSend(message); return Task.CompletedTask; }
+        public Task SendAsync(string message) { if (!IsConnected) throw new InvalidOperationException("WebSocket desconectado."); RpsWsSend(message); return Task.CompletedTask; }
         public Task DisconnectAsync() { RpsWsClose(); IsConnected = false; return Task.CompletedTask; }
         public void Tick() { }
 

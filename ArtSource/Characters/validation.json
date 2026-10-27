@@ -1,0 +1,198 @@
+[
+  {
+    "character": "Male",
+    "fbx": "D:\\Git\\Diego\\Jogos Unity\\Pedra Papel e Tesoura\\UnityProject\\Assets\\Characters\\Male\\RpsMale.fbx",
+    "bytes": 11479948,
+    "bones": 58,
+    "finger_bones": 30,
+    "finger_weighted_vertices": {
+      "RightHandThumb1": 216,
+      "RightHandThumb2": 180,
+      "RightHandThumb3": 144,
+      "RightHandIndex1": 216,
+      "RightHandIndex2": 192,
+      "RightHandIndex3": 132,
+      "RightHandMiddle1": 192,
+      "RightHandMiddle2": 180,
+      "RightHandMiddle3": 144,
+      "RightHandRing1": 204,
+      "RightHandRing2": 192,
+      "RightHandRing3": 120,
+      "RightHandPinky1": 216,
+      "RightHandPinky2": 180,
+      "RightHandPinky3": 120,
+      "LeftHandThumb1": 216,
+      "LeftHandThumb2": 180,
+      "LeftHandThumb3": 144,
+      "LeftHandIndex1": 216,
+      "LeftHandIndex2": 192,
+      "LeftHandIndex3": 132,
+      "LeftHandMiddle1": 192,
+      "LeftHandMiddle2": 180,
+      "LeftHandMiddle3": 144,
+      "LeftHandRing1": 204,
+      "LeftHandRing2": 192,
+      "LeftHandRing3": 120,
+      "LeftHandPinky1": 216,
+      "LeftHandPinky2": 180,
+      "LeftHandPinky3": 120
+    },
+    "vertices": 18780,
+    "triangles": 37380,
+    "clips": {
+      "CountIn": {
+        "frames": [
+          1.0,
+          46.0
+        ]
+      },
+      "Idle": {
+        "frames": [
+          1.0,
+          61.0
+        ]
+      },
+      "LeftCountIn": {
+        "frames": [
+          1.0,
+          46.0
+        ]
+      },
+      "LeftPaper": {
+        "frames": [
+          1.0,
+          42.0
+        ]
+      },
+      "LeftRock": {
+        "frames": [
+          1.0,
+          42.0
+        ]
+      },
+      "LeftScissors": {
+        "frames": [
+          1.0,
+          42.0
+        ]
+      },
+      "Paper": {
+        "frames": [
+          1.0,
+          42.0
+        ]
+      },
+      "Rock": {
+        "frames": [
+          1.0,
+          42.0
+        ]
+      },
+      "Scissors": {
+        "frames": [
+          1.0,
+          42.0
+        ]
+      }
+    },
+    "checks": "All 9 clips present; all 30 finger bones weighted; no unweighted vertices."
+  },
+  {
+    "character": "Female",
+    "fbx": "D:\\Git\\Diego\\Jogos Unity\\Pedra Papel e Tesoura\\UnityProject\\Assets\\Characters\\Female\\RpsFemale.fbx",
+    "bytes": 11295260,
+    "bones": 58,
+    "finger_bones": 30,
+    "finger_weighted_vertices": {
+      "RightHandThumb1": 192,
+      "RightHandThumb2": 192,
+      "RightHandThumb3": 132,
+      "RightHandIndex1": 204,
+      "RightHandIndex2": 180,
+      "RightHandIndex3": 132,
+      "RightHandMiddle1": 204,
+      "RightHandMiddle2": 192,
+      "RightHandMiddle3": 132,
+      "RightHandRing1": 216,
+      "RightHandRing2": 180,
+      "RightHandRing3": 120,
+      "RightHandPinky1": 204,
+      "RightHandPinky2": 192,
+      "RightHandPinky3": 120,
+      "LeftHandThumb1": 192,
+      "LeftHandThumb2": 192,
+      "LeftHandThumb3": 132,
+      "LeftHandIndex1": 204,
+      "LeftHandIndex2": 180,
+      "LeftHandIndex3": 132,
+      "LeftHandMiddle1": 204,
+      "LeftHandMiddle2": 192,
+      "LeftHandMiddle3": 132,
+      "LeftHandRing1": 216,
+      "LeftHandRing2": 180,
+      "LeftHandRing3": 120,
+      "LeftHandPinky1": 204,
+      "LeftHandPinky2": 192,
+      "LeftHandPinky3": 120
+    },
+    "vertices": 19821,
+    "triangles": 39781,
+    "clips": {
+      "CountIn": {
+        "frames": [
+          1.0,
+          46.0
+        ]
+      },
+      "Idle": {
+        "frames": [
+          1.0,
+          61.0
+        ]
+      },
+      "LeftCountIn": {
+        "frames": [
+          1.0,
+          46.0
+        ]
+      },
+      "LeftPaper": {
+        "frames": [
+          1.0,
+          42.0
+        ]
+      },
+      "LeftRock": {
+        "frames": [
+          1.0,
+          42.0
+        ]
+      },
+      "LeftScissors": {
+        "frames": [
+          1.0,
+          42.0
+        ]
+      },
+      "Paper": {
+        "frames": [
+          1.0,
+          42.0
+        ]
+      },
+      "Rock": {
+        "frames": [
+          1.0,
+          42.0
+        ]
+      },
+      "Scissors": {
+        "frames": [
+          1.0,
+          42.0
+        ]
+      }
+    },
+    "checks": "All 9 clips present; all 30 finger bones weighted; no unweighted vertices."
+  }
+]
